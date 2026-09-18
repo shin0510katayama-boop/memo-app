@@ -4,14 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="theme-color" content="#f4f1ea" />
-    <title>Memo</title>
-    <meta name="description" content="ブラウザに保存されるシンプルなメモアプリ" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#07090d" />
+    <title>MEMO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -19,48 +17,50 @@
       <section class="list-screen" id="list-screen">
         <header class="topbar">
           <div class="brand">
-            <div class="logo" aria-hidden="true">記</div>
+            <div class="logo" aria-hidden="true">M</div>
             <div>
-              <h1>Memo</h1>
-              <p class="tagline">この端末に保存</p>
+              <h1>MEMO</h1>
+              <p class="tagline">LOCAL // STORAGE</p>
             </div>
           </div>
         </header>
         <div class="search-wrap">
-          <input id="search" type="search" placeholder="メモを検索" autocomplete="off" enterkeyhint="search" />
+          <span class="search-prefix">/</span>
+          <input id="search" type="search" placeholder="SEARCH" autocomplete="off" enterkeyhint="search" />
         </div>
         <nav class="filters" aria-label="フィルター">
-          <button class="filter is-active" data-filter="all">すべて <span id="count-all">0</span></button>
-          <button class="filter" data-filter="pinned">ピン <span id="count-pinned">0</span></button>
-          <button class="filter" data-filter="archive">アーカイブ <span id="count-archive">0</span></button>
+          <button class="filter is-active" data-filter="all">ALL <span id="count-all">0</span></button>
+          <button class="filter" data-filter="pinned">PIN <span id="count-pinned">0</span></button>
+          <button class="filter" data-filter="archive">ARC <span id="count-archive">0</span></button>
         </nav>
         <ul id="memo-list" class="memo-list"></ul>
-        <p id="list-empty" class="list-empty hidden">該当するメモはありません</p>
-        <button id="new-btn" class="fab" type="button" aria-label="新しいメモ">＋</button>
+        <p id="list-empty" class="list-empty hidden">NO MATCH</p>
+        <button id="new-btn" class="fab" type="button" aria-label="新しいメモ">+</button>
       </section>
       <section class="editor-screen" id="editor-screen">
         <div id="empty-state" class="empty-state hidden">
           <div class="empty-card">
-            <h2>メモがありません</h2>
+            <p class="kicker">SYSTEM</p>
+            <h2>NO FILES</h2>
             <p>新しいメモを作成してください。</p>
-            <button id="empty-new" class="primary" type="button">最初のメモを書く</button>
+            <button id="empty-new" class="primary" type="button">NEW MEMO</button>
           </div>
         </div>
         <article id="editor" class="editor hidden">
           <div class="editor-nav">
-            <button id="back-btn" class="icon-btn" type="button">← 一覧</button>
+            <button id="back-btn" class="icon-btn" type="button">← LIST</button>
             <div class="editor-nav-actions">
-              <button id="pin-btn" class="chip" type="button">ピン</button>
-              <button id="archive-btn" class="chip" type="button">アーカイブ</button>
-              <button id="delete-btn" class="chip danger" type="button">削除</button>
+              <button id="pin-btn" class="chip" type="button">PIN</button>
+              <button id="archive-btn" class="chip" type="button">ARC</button>
+              <button id="delete-btn" class="chip danger" type="button">DEL</button>
             </div>
           </div>
           <div class="colors" id="color-picks" role="group" aria-label="色"></div>
-          <input id="title" class="title-input" type="text" placeholder="タイトル" maxlength="120" enterkeyhint="next" />
-          <textarea id="body" class="body-input" placeholder="本文を入力"></textarea>
+          <input id="title" class="title-input" type="text" placeholder="TITLE" maxlength="120" enterkeyhint="next" />
+          <textarea id="body" class="body-input" placeholder="WRITE..."></textarea>
           <footer class="editor-meta">
-            <span id="updated-at">未保存</span>
-            <span id="char-count">0 文字</span>
+            <span id="updated-at">UNSAVED</span>
+            <span id="char-count">0 CHARS</span>
           </footer>
         </article>
       </section>
