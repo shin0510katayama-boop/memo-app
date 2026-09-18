@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memo — シンプルなメモアプリ</title>
+    <meta name="description" content="ブラウザに保存されるシンプルなメモアプリ" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <header class="brand">
+          <div class="logo" aria-hidden="true">記</div>
+          <div>
+            <h1>Memo</h1>
+            <p class="tagline">この端末に保存されます</p>
+          </div>
+        </header>
+
+        <div class="search-wrap">
+          <input id="search" type="search" placeholder="メモを検索…" autocomplete="off" />
+        </div>
+
+        <nav class="filters" aria-label="フィルター">
+          <button class="filter is-active" data-filter="all">すべて <span id="count-all">0</span></button>
+          <button class="filter" data-filter="pinned">ピン留め <span id="count-pinned">0</span></button>
+          <button class="filter" data-filter="archive">アーカイブ <span id="count-archive">0</span></button>
+        </nav>
+
+        <div class="list-head">
+          <span>メモ一覧</span>
+          <button id="new-btn" class="primary" type="button">＋ 新規</button>
+        </div>
+        <ul id="memo-list" class="memo-list"></ul>
+      </aside>
+
+      <main class="editor-pane">
+        <div id="empty-state" class="empty-state">
+          <div class="empty-card">
+            <h2>メモを選びましょう</h2>
+            <p>左の一覧からメモを開くか、新しいメモを作成してください。</p>
+            <button id="empty-new" class="primary" type="button">最初のメモを書く</button>
+          </div>
+        </div>
+
+        <article id="editor" class="editor hidden">
+          <div class="editor-toolbar">
+            <div class="colors" id="color-picks" role="group" aria-label="色"></div>
+            <div class="toolbar-actions">
+              <button id="pin-btn" type="button" title="ピン留め">ピン</button>
+              <button id="archive-btn" type="button" title="アーカイブ">アーカイブ</button>
+              <button id="delete-btn" class="danger" type="button">削除</button>
+            </div>
+          </div>
+          <input id="title" class="title-input" type="text" placeholder="タイトル" maxlength="120" />
+          <textarea id="body" class="body-input" placeholder="本文を入力…"></textarea>
+          <footer class="editor-meta">
+            <span id="updated-at">未保存</span>
+            <span id="char-count">0 文字</span>
+          </footer>
+        </article>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
