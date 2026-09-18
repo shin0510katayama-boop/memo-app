@@ -7,53 +7,42 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#0b0c0e" />
     <title>Memo</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="app" id="app">
       <section class="list-screen" id="list-screen">
-        <header class="topbar">
-          <h1>Memo</h1>
-          <button id="new-btn" class="ghost" type="button">新規</button>
-        </header>
-        <div class="search-wrap">
-          <input id="search" type="search" placeholder="検索" autocomplete="off" enterkeyhint="search" />
-        </div>
-        <nav class="filters" aria-label="フィルター">
+        <header class="topbar"><h1>Memo</h1></header>
+        <div class="search-wrap"><input id="search" type="search" placeholder="検索" autocomplete="off" /></div>
+        <nav class="filters">
           <button class="filter is-active" data-filter="all">すべて <span id="count-all">0</span></button>
           <button class="filter" data-filter="pinned">ピン <span id="count-pinned">0</span></button>
           <button class="filter" data-filter="archive">アーカイブ <span id="count-archive">0</span></button>
         </nav>
         <ul id="memo-list" class="memo-list"></ul>
         <p id="list-empty" class="list-empty hidden">メモがありません</p>
+        <button id="new-btn" class="fab" type="button">新規</button>
       </section>
       <section class="editor-screen" id="editor-screen">
         <div id="empty-state" class="empty-state hidden">
           <div class="empty-card">
             <h2>メモがありません</h2>
-            <p>右上の新規から作成できます。</p>
+            <p>右下の新規から作成できます。</p>
             <button id="empty-new" class="primary" type="button">作成する</button>
           </div>
         </div>
         <article id="editor" class="editor hidden">
-          <div class="editor-nav">
-            <button id="back-btn" class="ghost" type="button">戻る</button>
-            <div class="editor-nav-actions">
-              <button id="pin-btn" class="ghost" type="button">ピン</button>
-              <button id="archive-btn" class="ghost" type="button">アーカイブ</button>
-              <button id="delete-btn" class="ghost danger" type="button">削除</button>
-            </div>
-          </div>
-          <div class="colors" id="color-picks" role="group" aria-label="色"></div>
-          <input id="title" class="title-input" type="text" placeholder="タイトル" maxlength="120" enterkeyhint="next" />
+          <div class="editor-nav"><button id="back-btn" class="ghost" type="button">戻る</button></div>
+          <div class="colors" id="color-picks"></div>
+          <input id="title" class="title-input" type="text" placeholder="タイトル" maxlength="120" />
           <textarea id="body" class="body-input" placeholder="本文"></textarea>
-          <footer class="editor-meta">
-            <span id="updated-at"></span>
-            <span id="char-count">0</span>
-          </footer>
+          <footer class="editor-meta"><span id="updated-at"></span><span id="char-count">0</span></footer>
+          <div class="editor-dock">
+            <button id="pin-btn" class="dock-btn" type="button">ピン</button>
+            <button id="archive-btn" class="dock-btn" type="button">アーカイブ</button>
+            <button id="delete-btn" class="dock-btn danger" type="button">削除</button>
+          </div>
         </article>
       </section>
     </div>
