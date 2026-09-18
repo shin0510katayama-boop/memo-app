@@ -2,7 +2,9 @@ const STORAGE_KEY = "memo-app.v1";
 const COLORS = ["#f4efe6", "#f8e3d4", "#e7f0e4", "#e4ecf6", "#f3e6f1", "#f7e9c8"];
 
 const els = {
+  app: document.getElementById("app"),
   list: document.getElementById("memo-list"),
+  listEmpty: document.getElementById("list-empty"),
   search: document.getElementById("search"),
   newBtn: document.getElementById("new-btn"),
   emptyNew: document.getElementById("empty-new"),
@@ -13,6 +15,7 @@ const els = {
   pin: document.getElementById("pin-btn"),
   archive: document.getElementById("archive-btn"),
   del: document.getElementById("delete-btn"),
+  back: document.getElementById("back-btn"),
   updated: document.getElementById("updated-at"),
   chars: document.getElementById("char-count"),
   colors: document.getElementById("color-picks"),
@@ -26,7 +29,12 @@ let state = {
   selectedId: null,
   filter: "all",
   query: "",
+  editing: false,
 };
+
+function isMobile() {
+  return window.matchMedia("(max-width: 859px)").matches;
+}
 
 function uid() {
   return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random();
@@ -79,7 +87,6 @@ function filtered() {
 
 function formatDate(ts) {
   return new Date(ts).toLocaleString("ja-JP", {
-    year: "numeric",
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -87,8 +94,21 @@ function formatDate(ts) {
   });
 }
 
+function openEditor(id) {
+  state.selectedId = id;
+  state.editing = true;
+  render();
+}
+
+function closeEditor() {
+  state.editing = false;
+  if (isMobile()) state.selectedId = null;
+  render();
+}
+
 function renderList() {
   const items = filtered();
+  els.listEmpty.classList.toggle("hidden", items.length > 0);
   els.list.innerHTML = items
     .map((m) => {
       const preview = m.body.replace(/\s+/g, " ").trim() || "本文なし";
@@ -111,9 +131,10 @@ function renderList() {
 
 function renderEditor() {
   const memo = selected();
+  els.app.classList.toggle("is-editing", state.editing && !!memo);
   if (!memo) {
     els.editor.classList.add("hidden");
-    els.empty.classList.remove("hidden");
+    els.empty.classList.toggle("hidden", state.memos.length > 0);
     return;
   }
   els.empty.classList.add("hidden");
@@ -123,8 +144,8 @@ function renderEditor() {
     els.body.value = memo.body;
   }
   els.pin.textContent = memo.pinned ? "ピン解除" : "ピン";
-  els.archive.textContent = memo.archived ? "元に戻す" : "アーカイブ";
-  els.updated.textContent = `更新: ${formatDate(memo.updatedAt)}`;
+  els.archive.textContent = memo.archived ? "戻す" : "アーカイブ";
+  els.updated.textContent = `更新 ${formatDate(memo.updatedAt)}`;
   els.chars.textContent = `${memo.body.length} 文字`;
   renderColors(memo.color);
 }
@@ -157,11 +178,10 @@ function createMemo() {
     updatedAt: now,
   };
   state.memos.unshift(memo);
-  state.selectedId = memo.id;
   state.filter = "all";
   save();
-  render();
-  els.title.focus();
+  openEditor(memo.id);
+  setTimeout(() => els.title.focus(), 50);
 }
 
 function updateSelected(patch) {
@@ -179,6 +199,7 @@ function render() {
 
 els.newBtn.addEventListener("click", createMemo);
 els.emptyNew.addEventListener("click", createMemo);
+els.back.addEventListener("click", closeEditor);
 els.search.addEventListener("input", (e) => {
   state.query = e.target.value;
   renderList();
@@ -188,14 +209,13 @@ document.querySelectorAll(".filter").forEach((btn) => {
     document.querySelectorAll(".filter").forEach((b) => b.classList.remove("is-active"));
     btn.classList.add("is-active");
     state.filter = btn.dataset.filter;
-    render();
+    renderList();
   });
 });
 els.list.addEventListener("click", (e) => {
   const item = e.target.closest(".memo-item");
   if (!item) return;
-  state.selectedId = item.dataset.id;
-  render();
+  openEditor(item.dataset.id);
 });
 els.title.addEventListener("input", () => updateSelected({ title: els.title.value }));
 els.body.addEventListener("input", () => updateSelected({ body: els.body.value }));
@@ -207,6 +227,7 @@ els.del.addEventListener("click", () => {
   if (!confirm("このメモを削除しますか？")) return;
   state.memos = state.memos.filter((m) => m.id !== memo.id);
   state.selectedId = null;
+  state.editing = false;
   save();
   render();
 });
@@ -216,6 +237,14 @@ els.colors.addEventListener("click", (e) => {
   updateSelected({ color: btn.dataset.color });
 });
 
+window.addEventListener("resize", () => {
+  if (!isMobile() && state.selectedId) state.editing = true;
+  render();
+});
+
 load();
-if (state.memos[0]) state.selectedId = state.memos[0].id;
+if (!isMobile() && state.memos[0]) {
+  state.selectedId = state.memos[0].id;
+  state.editing = true;
+}
 render();
